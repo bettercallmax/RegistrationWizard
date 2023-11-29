@@ -4,6 +4,7 @@ import { CountriesService, UsersService } from '../api/services';
 import { Observable, of, switchMap } from 'rxjs';
 import { CountryModel, ProvinceModel, RegisterModel } from '../api/models';
 import { PasswordValidator } from './password.validator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration-wizard',
@@ -28,7 +29,10 @@ export class RegistrationWizardComponent implements OnInit {
   public countries$: Observable<CountryModel[]>;
   public provinces$: Observable<ProvinceModel[]>;
 
-  constructor(private readonly countryService: CountriesService, private readonly userService: UsersService) {
+  constructor(
+    private readonly countryService: CountriesService,
+    private readonly userService: UsersService,
+    private readonly router: Router) {
     this.loginForm.addValidators(this.createCompareValidator(this.loginForm.controls.password, this.loginForm.controls.confirmPassword));
   }
 
@@ -51,7 +55,7 @@ export class RegistrationWizardComponent implements OnInit {
 
     this.userService.userRegisterPost({
       body: registerModel
-    }).subscribe();
+    }).subscribe(_ => this.router.navigate(['/login']));
   }
 
   getModelFromControls(): RegisterModel {

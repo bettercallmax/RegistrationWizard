@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +10,13 @@ namespace Infrastructure.Identity
     internal class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationIdentityUser> _userManager;
+        private readonly ApplicationDbContext _dbContext;
 
         public IdentityService(
-            UserManager<ApplicationIdentityUser> userManager)
+            UserManager<ApplicationIdentityUser> userManager, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         public async Task<bool> CheckPasswordAsync(string login, string password, CancellationToken token)
@@ -30,6 +33,8 @@ namespace Infrastructure.Identity
 
         public async Task CreateUserAsync(string login, string password, Province province, CancellationToken token)
         {
+            // Attach it to the context so that it does not attempt to add a new one
+            _dbContext.Entry(province).State = EntityState.Unchanged;
             var identityResult = await _userManager.CreateAsync(new ApplicationIdentityUser
             {
                 UserName = login,
