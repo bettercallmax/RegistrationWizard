@@ -1,0 +1,62 @@
+<mat-card>
+    <mat-card-title>Register</mat-card-title>
+    <mat-card-content>
+        <ng-container *ngIf="currentStepIndex === 0">
+            <form [formGroup]="loginForm">
+                <p>
+                    <mat-form-field>
+                        <input type="text" matInput placeholder="Login" formControlName="login" required>
+                        <mat-error *ngIf="loginForm.controls.login.invalid && (loginForm.controls.login.dirty || loginForm.controls.login.touched)">Login must be a valid email</mat-error>
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-form-field>
+                        <input type="password" matInput placeholder="Password" formControlName="password" required>
+                        <mat-error *ngIf="loginForm.controls.password.invalid && (loginForm.controls.password.dirty || loginForm.controls.password.touched)">Password must contains min 1 digit and min 1 uppercase letter</mat-error>
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-form-field>
+                        <input type="password" matInput placeholder="Confirm Password" formControlName="confirmPassword" required>
+                        <mat-error *ngIf="loginForm.controls.confirmPassword.invalid && (loginForm.controls.confirmPassword.dirty || loginForm.controls.confirmPassword.touched)">Confirm password must be the same with password</mat-error>
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-checkbox typeof="as" matInput formControlName="agreement" required>
+                        Will work for food
+                    </mat-checkbox>
+                    <mat-error *ngIf="loginForm.controls.agreement.invalid && (loginForm.controls.agreement.dirty || loginForm.controls.agreement.touched)">Agreement is required</mat-error>
+                </p>
+            </form>
+            <button mat-button (click)="nextStep()" [disabled]="!loginForm.valid">Next</button>
+        </ng-container>
+
+        <ng-container *ngIf="currentStepIndex === 1">
+            <form [formGroup]="countryForm">
+                <p>
+                    <mat-form-field>
+                        <mat-label>Country</mat-label>
+                        <select matNativeControl formControlName="countryId" required>
+                            <option *ngFor="let country of countries$ | async" [value]="country.id">
+                                {{country.name}}
+                            </option>
+                        </select>
+                        <mat-error *ngIf="countryForm.controls.countryId.invalid && (countryForm.controls.countryId.dirty || countryForm.controls.countryId.touched)">Country is required</mat-error>
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-form-field>
+                        <mat-label>Province</mat-label>
+                        <select matNativeControl formControlName="provinceId" required>
+                            <option *ngFor="let province of provinces$ | async" [value]="province.id">
+                                {{province.name}}
+                            </option>
+                        </select>
+                        <mat-error *ngIf="countryForm.controls.provinceId.invalid && (countryForm.controls.provinceId.dirty || countryForm.controls.provinceId.touched)">Country is required</mat-error>
+                    </mat-form-field>
+                </p>
+            </form>
+            <button mat-button (click)="submit()" [disabled]="!countryForm.valid">Submit</button>
+        </ng-container>
+    </mat-card-content>
+</mat-card>
