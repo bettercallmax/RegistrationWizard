@@ -13,8 +13,8 @@ namespace Infrastructure.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public Task<List<Country>> GetAllAsync(CancellationToken token) => _dbContext.Countries.AsNoTracking().ToListAsync();
+        public Task<List<Country>> GetAllAsync(CancellationToken token) => _dbContext.Countries.AsNoTracking().ToListAsync(cancellationToken: token);
 
-        public Task<Country?> GetAsync(int id, CancellationToken token) => _dbContext.Countries?.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+        public Task<Country?> GetAsync(int id, CancellationToken token) => _dbContext.Countries.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, cancellationToken: token);
     }
 }

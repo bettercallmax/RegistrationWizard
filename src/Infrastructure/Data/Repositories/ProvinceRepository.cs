@@ -16,12 +16,12 @@ namespace Infrastructure.Data.Repositories
         public Task<Province?> GetAsync(int id, CancellationToken token) =>
             _dbContext.Provinces
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.Id == id);
+                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken: token);
 
         public Task<List<Province>> GetByCountryIdAsync(int countryId, CancellationToken token) =>
             _dbContext.Provinces
                 .AsNoTracking()
                 .Where(x => x.Country.Id == countryId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: token);
     }
 }

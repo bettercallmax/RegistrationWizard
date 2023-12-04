@@ -7,7 +7,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>3712a3aa-9495-4753-9cc7-ba132e1cdd93</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	<SpaRoot>ClientApp\</SpaRoot>
+	<SpaRoot>ClientApp</SpaRoot>
 	<SpaProxyServerUrl>https://localhost:44447</SpaProxyServerUrl>
 	<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
   </PropertyGroup>

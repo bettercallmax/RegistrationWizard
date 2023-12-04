@@ -21,7 +21,7 @@ namespace Infrastructure.Identity
 
         public async Task<bool> CheckPasswordAsync(string login, string password, CancellationToken token)
         {
-            var identity = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant());
+            var identity = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant(), cancellationToken: token);
             if (identity == null)
             {
                 throw new NotFoundException($"User with login {login} not found");
@@ -49,13 +49,13 @@ namespace Infrastructure.Identity
 
             if (identityResult == null || identityResult.Errors.Any() || !identityResult.Succeeded)
             {
-                throw new DomainException($"Can't create user. {string.Join(',', values: identityResult?.Errors.Select(x => x.Code))}");
+                throw new DomainException($"Can't create user. {string.Join(',', values: identityResult?.Errors.Select(x => x.Code) ?? Array.Empty<string>())}");
             }
         }
 
         public async Task DeleteUserAsync(string login, CancellationToken token)
         {
-            var identity = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant());
+            var identity = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant(), cancellationToken: token);
             if (identity == null)
             {
                 throw new NotFoundException($"User with login {login} not found");
@@ -69,21 +69,16 @@ namespace Infrastructure.Identity
             var identity = await _userManager
                 .Users
                 .Include(x => x.DomainUser.Province)
-                .SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant());
+                .SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant(), cancellationToken: token);
 
             return identity?.DomainUser;
         }
 
         public async Task<User?> GetUserByLogin(string login, CancellationToken token)
         {
-            var identity = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant());
+            var identity = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == login.ToUpperInvariant(), cancellationToken: token);
 
             return identity?.DomainUser;
-        }
-
-        public Task<User?> GetUserByLogin(User user, CancellationToken token)
-        {
-            throw new NotImplementedException();
         }
     }
 }

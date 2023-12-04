@@ -9,13 +9,13 @@ namespace Infrastructure.Data
     {
         public static async Task ApplyMigrationsAsync(this IServiceProvider serviceProvider)
         {
-            using var scope = serviceProvider.CreateAsyncScope();
+            await using var scope = serviceProvider.CreateAsyncScope();
             await ApplyMigrationForContext<ApplicationDbContext>(scope);
         }
 
         public static async Task SeedTestDataAsync(this IServiceProvider serviceProvider)
         {
-            using var scope = serviceProvider.CreateAsyncScope();
+            await using var scope = serviceProvider.CreateAsyncScope();
             var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var identityService = scope.ServiceProvider.GetRequiredService<IIdentityService>();
             await appContext.Database.EnsureCreatedAsync();

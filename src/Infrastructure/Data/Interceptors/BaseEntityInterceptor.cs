@@ -27,7 +27,7 @@ namespace Infrastructure.Data.Interceptors
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
-        public void UpdateEntities(DbContext? context)
+        private void UpdateEntities(DbContext? context)
         {
             if (context == null) return;
 
@@ -39,7 +39,7 @@ namespace Infrastructure.Data.Interceptors
                     entry.Entity.CreatedDate = now;
                 }
 
-                if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+                if (entry.State is EntityState.Added or EntityState.Modified)
                 {
                     entry.Entity.UpdatedDate = now;
                 }
