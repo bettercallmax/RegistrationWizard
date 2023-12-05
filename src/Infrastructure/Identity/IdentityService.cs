@@ -43,7 +43,6 @@ namespace Infrastructure.Identity
                 {
                     Province = province,
                     Login = login,
-                    
                 }
             }, password);
 
